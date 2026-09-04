@@ -1,0 +1,28 @@
+# Source TypeScript — not needed in the packaged extension
+src/
+tsconfig.json
+
+# Dev tooling
+.vscode/
+*.vsix
+
+# Source maps (save ~30% package size; remove this line if you want them)
+out/**/*.map
+
+# Test artifacts
+.vscode-test/
+coverage/
+**/*.test.js
+**/*.spec.js
+
+# Repo-level files
+../.git
+../fork-config
+../README.md
+../.gitignore
+
+# Large node_modules that are bundled or not needed at runtime
+# (keep @aws-sdk/client-bedrock-runtime and @modelcontextprotocol/sdk)
+node_modules/@types/
+node_modules/typescript/
+node_modules/chokidar/node_modules/

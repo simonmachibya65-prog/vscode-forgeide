@@ -1,0 +1,753 @@
+{
+  "name": "forgeide",
+  "displayName": "ForgeIDE Agent",
+  "description": "Spec-driven agentic coding assistant: specs, hooks, steering, MCP, inline completions, Cmd-K, and full Gatework IDE shell UI.",
+  "version": "0.2.0",
+  "publisher": "forgeide",
+  "homepage": "https://github.com/yourname/forgeide",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourname/forgeide"
+  },
+  "bugs": {
+    "url": "https://github.com/yourname/forgeide/issues"
+  },
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "AI",
+    "Chat",
+    "Themes",
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "bin": {
+    "forgeide": "./out/cli/forgeide-cli.js"
+  },
+  "contributes": {
+    "chatParticipants": [
+      {
+        "id": "forgeide.agent",
+        "fullName": "ForgeIDE Agent",
+        "name": "forge",
+        "description": "Spec-driven coding agent. Try @forge build a login page",
+        "isSticky": true,
+        "commands": [
+          {
+            "name": "spec",
+            "description": "Turn a prompt into requirements, design, and tasks"
+          },
+          {
+            "name": "implement",
+            "description": "Points you at the Specs view to implement a task"
+          },
+          {
+            "name": "hooks",
+            "description": "List or manage agent hooks for this workspace"
+          },
+          {
+            "name": "review",
+            "description": "Run BugBot review on proposed changes"
+          }
+        ]
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "forgeide",
+          "title": "ForgeIDE",
+          "icon": "resources/activitybar-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "forgeide": [
+        {
+          "id": "forgeide.specsView",
+          "name": "Specs"
+        },
+        {
+          "id": "forgeide.hooksView",
+          "name": "Hooks"
+        },
+        {
+          "id": "forgeide.steeringView",
+          "name": "Steering"
+        },
+        {
+          "id": "forgeide.mcpView",
+          "name": "MCP Servers"
+        },
+        {
+          "id": "forgeide.powersView",
+          "name": "Powers"
+        },
+        {
+          "id": "forgeide.skillsView",
+          "name": "Skills"
+        },
+        {
+          "id": "forgeide.agentsView",
+          "name": "Agents"
+        },
+        {
+          "id": "forgeide.checkpointsView",
+          "name": "Checkpoints"
+        },
+        {
+          "id": "forgeide.scmView",
+          "name": "Source Control"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "forgeide.generateCommitMessage",
+        "title": "ForgeIDE: Generate AI Commit Message",
+        "icon": "$(git-commit)"
+      },
+      {
+        "command": "forgeide.openIdeShell",
+        "title": "ForgeIDE: Open IDE Shell",
+        "icon": "$(layout)"
+      },
+      {
+        "command": "forgeide.runPipeline",
+        "title": "ForgeIDE: Run Full Pipeline (Spec → Implement → Verify)"
+      },
+      {
+        "command": "forgeide.daemonPing",
+        "title": "ForgeIDE: Ping Agent Daemon"
+      },
+      {
+        "command": "forgeide.showCloudTasks",
+        "title": "ForgeIDE: Show Cloud Background Tasks"
+      },
+      {
+        "command": "forgeide.routerStats",
+        "title": "ForgeIDE: Model Router Stats"
+      },
+      {
+        "command": "forgeide.connector.detect",
+        "title": "ForgeIDE: Detect IaC Connectors"
+      },
+      {
+        "command": "forgeide.connector.plan",
+        "title": "ForgeIDE: IaC Plan (CDK/SAM/Terraform/Pulumi)"
+      },
+      {
+        "command": "forgeide.connector.deploy",
+        "title": "ForgeIDE: IaC Deploy"
+      },
+      {
+        "command": "forgeide.inspectEnvironment",
+        "title": "ForgeIDE: Inspect Project Environment",
+        "icon": "$(info)"
+      },
+      {
+        "command": "forgeide.databasePlan",
+        "title": "ForgeIDE: Generate Database Plan",
+        "icon": "$(database)"
+      },
+      {
+        "command": "forgeide.generateDatabaseEnv",
+        "title": "ForgeIDE: Generate Database Environment Template",
+        "icon": "$(key)"
+      },
+      {
+        "command": "forgeide.databaseMigrate",
+        "title": "ForgeIDE: Run Database Migration",
+        "icon": "$(database)"
+      },
+      {
+        "command": "forgeide.deploymentPreflight",
+        "title": "ForgeIDE: Deployment Preflight",
+        "icon": "$(check-all)"
+      },
+      {
+        "command": "forgeide.deploymentHistory",
+        "title": "ForgeIDE: Deployment History",
+        "icon": "$(history)"
+      },
+      {
+        "command": "forgeide.checkDeployment",
+        "title": "ForgeIDE: Check Deployment Health",
+        "icon": "$(pulse)"
+      },
+      {
+        "command": "forgeide.release",
+        "title": "ForgeIDE: Run Release Workflow",
+        "icon": "$(rocket)"
+      },
+      {
+        "command": "forgeide.newSpec",
+        "title": "ForgeIDE: New Spec from Prompt"
+      },
+      {
+        "command": "forgeide.approveRequirements",
+        "title": "ForgeIDE: Approve Requirements"
+      },
+      {
+        "command": "forgeide.approveDesign",
+        "title": "ForgeIDE: Approve Design"
+      },
+      {
+        "command": "forgeide.approveTasks",
+        "title": "ForgeIDE: Approve Tasks (Unlocks Code Generation)"
+      },
+      {
+        "command": "forgeide.approveSpecStage",
+        "title": "ForgeIDE: Approve Current Spec Stage"
+      },
+      {
+        "command": "forgeide.openSpecWebview",
+        "title": "ForgeIDE: Open Spec Panel",
+        "icon": "$(open-preview)"
+      },
+      {
+        "command": "forgeide.implementTask",
+        "title": "ForgeIDE: Implement Task"
+      },
+      {
+        "command": "forgeide.addHook",
+        "title": "ForgeIDE: Add Agent Hook"
+      },
+      {
+        "command": "forgeide.toggleHook",
+        "title": "ForgeIDE: Toggle Hook",
+        "icon": "$(zap)"
+      },
+      {
+        "command": "forgeide.runPreCommitHooks",
+        "title": "ForgeIDE: Run Pre-Commit Hooks"
+      },
+      {
+        "command": "forgeide.reloadSteering",
+        "title": "ForgeIDE: Reload Steering Files"
+      },
+      {
+        "command": "forgeide.mcpConnect",
+        "title": "ForgeIDE: Connect MCP Server",
+        "icon": "$(plug)"
+      },
+      {
+        "command": "forgeide.mcpDisconnect",
+        "title": "ForgeIDE: Disconnect MCP Server"
+      },
+      {
+        "command": "forgeide.toggleAutopilot",
+        "title": "ForgeIDE: Toggle Autopilot / Supervised Mode"
+      },
+      {
+        "command": "forgeide.pickModel",
+        "title": "ForgeIDE: Pick Model"
+      },
+      {
+        "command": "forgeide.cmdK",
+        "title": "ForgeIDE: Inline Edit (Cmd-K)"
+      },
+      {
+        "command": "forgeide.quickEdit",
+        "title": "ForgeIDE: Quick Edit with AI",
+        "icon": "$(wand)"
+      },
+      {
+        "command": "forgeide.askCodebase",
+        "title": "ForgeIDE: Ask Codebase",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "forgeide.restoreCheckpoint",
+        "title": "ForgeIDE: Restore Checkpoint"
+      },
+      {
+        "command": "forgeide.showBackgroundTasks",
+        "title": "ForgeIDE: Show Background Tasks"
+      },
+      {
+        "command": "forgeide.rebuildIndex",
+        "title": "ForgeIDE: Rebuild Codebase Index"
+      },
+      {
+        "command": "forgeide.searchWorkspace",
+        "title": "ForgeIDE: Search Workspace",
+        "icon": "$(search)"
+      },
+      {
+        "command": "forgeide.gotoSymbol",
+        "title": "ForgeIDE: Go to Symbol",
+        "icon": "$(symbol-field)"
+      },
+      {
+        "command": "forgeide.installPower",
+        "title": "ForgeIDE: Install Power from Directory"
+      },
+      {
+        "command": "forgeide.scaffoldPower",
+        "title": "ForgeIDE: New Power (Scaffold)",
+        "icon": "$(add)"
+      },
+      {
+        "command": "forgeide.convertPowerMd",
+        "title": "ForgeIDE: Convert POWER.md → plugin.json"
+      },
+      {
+        "command": "forgeide.activatePower",
+        "title": "ForgeIDE: Activate Power",
+        "icon": "$(zap)"
+      },
+      {
+        "command": "forgeide.deactivatePower",
+        "title": "ForgeIDE: Deactivate Power",
+        "icon": "$(circle-slash)"
+      },
+      {
+        "command": "forgeide.uninstallPower",
+        "title": "ForgeIDE: Uninstall Power"
+      },
+      {
+        "command": "forgeide.openSkill",
+        "title": "ForgeIDE: Open Skill File"
+      },
+      {
+        "command": "forgeide.reloadSkills",
+        "title": "ForgeIDE: Reload Skills",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "forgeide.scaffoldAgent",
+        "title": "ForgeIDE: New Agent (Scaffold)",
+        "icon": "$(add)"
+      },
+      {
+        "command": "forgeide.openAgent",
+        "title": "ForgeIDE: Open Agent Definition"
+      },
+      {
+        "command": "forgeide.setActiveAgent",
+        "title": "ForgeIDE: Set Active Agent",
+        "icon": "$(play-circle)"
+      },
+      {
+        "command": "forgeide.reloadAgents",
+        "title": "ForgeIDE: Reload Agents",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "forgeide.runAgent",
+        "title": "ForgeIDE: Run Agent on Selection"
+      },
+      {
+        "command": "forgeide.startProcess",
+        "title": "ForgeIDE: Start Background Process"
+      },
+      {
+        "command": "forgeide.stopProcess",
+        "title": "ForgeIDE: Stop Background Process"
+      },
+      {
+        "command": "forgeide.listProcesses",
+        "title": "ForgeIDE: List Background Processes"
+      },
+      {
+        "command": "forgeide.openTerminal",
+        "title": "ForgeIDE: Open Integrated Terminal",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "forgeide.runTask",
+        "title": "ForgeIDE: Run Workspace Task",
+        "icon": "$(play)"
+      },
+      {
+        "command": "forgeide.refreshScm",
+        "title": "ForgeIDE: Refresh Source Control",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "forgeide.openScmFile",
+        "title": "ForgeIDE: Open Changed File"
+      },
+      {
+        "command": "forgeide.gitStage",
+        "title": "ForgeIDE: Stage File"
+      },
+      {
+        "command": "forgeide.gitUnstage",
+        "title": "ForgeIDE: Unstage File"
+      },
+      {
+        "command": "forgeide.gitCommit",
+        "title": "ForgeIDE: Commit Staged Changes",
+        "icon": "$(git-commit)"
+      },
+      {
+        "command": "forgeide.gitPull",
+        "title": "ForgeIDE: Pull Changes",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "forgeide.gitPush",
+        "title": "ForgeIDE: Push Changes",
+        "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "forgeide.githubCreatePr",
+        "title": "ForgeIDE: Create GitHub Pull Request",
+        "icon": "$(github)"
+      },
+      {
+        "command": "forgeide.showProblems",
+        "title": "ForgeIDE: Show Problems",
+        "icon": "$(error)"
+      },
+      {
+        "command": "forgeide.runTests",
+        "title": "ForgeIDE: Run Tests",
+        "icon": "$(beaker)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "forgeide.cmdK",
+        "key": "ctrl+k",
+        "mac": "cmd+k",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "forgeide.quickEdit",
+        "key": "ctrl+alt+k",
+        "mac": "cmd+alt+k",
+        "when": "editorTextFocus"
+      }
+    ],
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "forgeide.gitStage",
+          "when": "view == forgeide.scmView && viewItem == forgeide.scmChange",
+          "group": "inline"
+        },
+        {
+          "command": "forgeide.gitUnstage",
+          "when": "view == forgeide.scmView && viewItem == forgeide.scmChange",
+          "group": "inline"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "forgeide.newSpec",
+          "when": "view == forgeide.specsView",
+          "group": "navigation"
+        },
+        {
+          "command": "forgeide.openIdeShell",
+          "when": "view == forgeide.specsView",
+          "group": "navigation@0"
+        },
+        {
+          "command": "forgeide.addHook",
+          "when": "view == forgeide.hooksView",
+          "group": "navigation"
+        },
+        {
+          "command": "forgeide.mcpConnect",
+          "when": "view == forgeide.mcpView",
+          "group": "navigation"
+        },
+        {
+          "command": "forgeide.reloadSteering",
+          "when": "view == forgeide.steeringView",
+          "group": "navigation"
+        },
+        {
+          "command": "forgeide.scaffoldPower",
+          "when": "view == forgeide.powersView",
+          "group": "navigation"
+        },
+        {
+          "command": "forgeide.reloadSkills",
+          "when": "view == forgeide.skillsView",
+          "group": "navigation"
+        },
+        {
+          "command": "forgeide.scaffoldAgent",
+          "when": "view == forgeide.agentsView",
+          "group": "navigation"
+        },
+        {
+          "command": "forgeide.reloadAgents",
+          "when": "view == forgeide.agentsView",
+          "group": "navigation@1"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "forgeide.toggleHook",
+          "when": "view == forgeide.hooksView",
+          "group": "inline"
+        },
+        {
+          "command": "forgeide.openSpecWebview",
+          "when": "view == forgeide.specsView    && viewItem =~ /forgeide\\.spec/",
+          "group": "inline"
+        },
+        {
+          "command": "forgeide.mcpDisconnect",
+          "when": "view == forgeide.mcpView      && viewItem == forgeide.mcpServer",
+          "group": "inline"
+        },
+        {
+          "command": "forgeide.activatePower",
+          "when": "view == forgeide.powersView   && viewItem == forgeide.power.inactive",
+          "group": "inline"
+        },
+        {
+          "command": "forgeide.deactivatePower",
+          "when": "view == forgeide.powersView   && viewItem == forgeide.power.active",
+          "group": "inline"
+        },
+        {
+          "command": "forgeide.uninstallPower",
+          "when": "view == forgeide.powersView",
+          "group": "1_modify"
+        },
+        {
+          "command": "forgeide.setActiveAgent",
+          "when": "view == forgeide.agentsView   && viewItem == forgeide.agent",
+          "group": "inline"
+        },
+        {
+          "command": "forgeide.openAgent",
+          "when": "view == forgeide.agentsView   && viewItem =~ /forgeide\\.agent/",
+          "group": "1_open"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "forgeide.cmdK",
+          "when": "editorTextFocus",
+          "group": "forgeide@1"
+        }
+      ]
+    },
+    "themes": [
+      {
+        "label": "ForgeIDE Dark",
+        "uiTheme": "vs-dark",
+        "path": "./resources/themes/forgeide-dark.json"
+      }
+    ],
+    "configuration": {
+      "title": "ForgeIDE",
+      "properties": {
+        "forgeide.model.provider": {
+          "type": "string",
+          "enum": [
+            "anthropic",
+            "openai",
+            "bedrock"
+          ],
+          "default": "anthropic",
+          "description": "Which LLM provider to use for agent reasoning."
+        },
+        "forgeide.model.name": {
+          "type": "string",
+          "default": "claude-sonnet-4-6",
+          "description": "Model identifier for chat, specs, hooks, completions, and Cmd-K."
+        },
+        "forgeide.gateMode": {
+          "type": "string",
+          "enum": [
+            "supervised",
+            "autopilot"
+          ],
+          "default": "supervised",
+          "enumDescriptions": [
+            "Every write opens a diff preview and requires explicit Apply.",
+            "Approved spec tasks write files directly without per-file confirmation."
+          ],
+          "description": "Execution mode: supervised (diff-gate every write) or autopilot (write after spec approval)."
+        },
+        "forgeide.specs.directory": {
+          "type": "string",
+          "default": ".kiro/specs",
+          "description": "Workspace-relative folder where spec artifacts are stored."
+        },
+        "forgeide.hooks.directory": {
+          "type": "string",
+          "default": ".kiro/hooks",
+          "description": "Workspace-relative folder where hook definitions are stored."
+        },
+        "forgeide.steering.directory": {
+          "type": "string",
+          "default": ".kiro/steering",
+          "description": "Workspace-relative folder of always-on context files for the agent."
+        },
+        "forgeide.completion.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Tab inline ghost-text completions (only fires when an approved spec task is in progress)."
+        },
+        "forgeide.terminal.confirmCommands": {
+          "type": "boolean",
+          "default": true,
+          "description": "Ask for confirmation before ForgeIDE runs a shell command or starts a terminal process."
+        },
+        "forgeide.testing.command": {
+          "type": "string",
+          "default": "npm test",
+          "description": "Default command used by ForgeIDE: Run Tests."
+        },
+        "forgeide.testing.timeoutMs": {
+          "type": "number",
+          "default": 120000,
+          "minimum": 1000,
+          "description": "Maximum time in milliseconds for ForgeIDE: Run Tests."
+        },
+        "forgeide.bugbot.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Run BugBot automated review before presenting proposed file changes."
+        },
+        "forgeide.bedrock.region": {
+          "type": "string",
+          "default": "us-east-1",
+          "description": "AWS region for Bedrock provider. Uses the default credential chain (env vars, ~/.aws/credentials, IAM role)."
+        },
+        "forgeide.router.providers": {
+          "type": "array",
+          "default": [],
+          "description": "Additional model providers for the ModelRouter (fallback/cost routing).",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "provider": {
+                "type": "string",
+                "enum": [
+                  "anthropic",
+                  "openai",
+                  "bedrock",
+                  "ollama"
+                ]
+              },
+              "model": {
+                "type": "string"
+              },
+              "priority": {
+                "type": "number"
+              },
+              "enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "preferredFor": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "priority",
+                    "cost",
+                    "latency",
+                    "quality"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "name",
+              "provider",
+              "model",
+              "priority"
+            ]
+          }
+        },
+        "forgeide.mcpServers": {
+          "type": "array",
+          "default": [],
+          "description": "MCP servers to auto-connect on startup.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "transport": {
+                "type": "string",
+                "enum": [
+                  "stdio",
+                  "sse"
+                ]
+              },
+              "command": {
+                "type": "string"
+              },
+              "args": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "url": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "transport"
+            ]
+          }
+        },
+        "forgeide.powers.directory": {
+          "type": "string",
+          "default": ".kiro/powers",
+          "description": "Workspace-relative folder where installed Powers are stored."
+        },
+        "forgeide.skills.directory": {
+          "type": "string",
+          "default": ".kiro/skills",
+          "description": "Workspace-relative folder where workspace-scoped SKILL.md files live."
+        },
+        "forgeide.agents.directory": {
+          "type": "string",
+          "default": ".kiro/agents",
+          "description": "Workspace-relative folder where custom agent JSON definitions are stored."
+        },
+        "forgeide.agents.active": {
+          "type": "string",
+          "default": "default",
+          "description": "ID of the agent to use for chat and task execution (default, spec, quickspec, bugfix, or a custom id)."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -w -p ./",
+    "package": "vsce package --out forgeide.vsix",
+    "publish": "vsce publish",
+    "publish:ovsx": "ovsx publish forgeide.vsix",
+    "prepackage": "npm run compile"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.90.0",
+    "@vscode/vsce": "^3.9.2",
+    "ovsx": "^0.9.5",
+    "typescript": "^5.4.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.1126.0",
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "chokidar": "^3.6.0"
+  }
+}
